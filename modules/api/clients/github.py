@@ -25,3 +25,4 @@ class GitHub:
         r = requests.get(f'https://api.github.com/repos/{owner}/{repo}/commits')
         body = r.json()
         return body
+    

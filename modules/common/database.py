@@ -25,6 +25,12 @@ class Database():
         record = self.cursor.fetchall()
         return record
     
+    def get_product_id_by_name(self,name):
+        query = f"SELECT id FROM products WHERE name = '{name}'"
+        self.cursor.execute(query)
+        record = self.cursor.fetchall()
+        return record
+    
     def update_product_qnt_by_id(self, product_id, qnt):
         query = f"UPDATE products SET quantity = {qnt} WHERE id = {product_id}"
         self.cursor.execute(query)
@@ -32,6 +38,12 @@ class Database():
 
     def select_product_qnt_by_id(self, product_id):
         query = f"SELECT quantity FROM products WHERE id = {product_id}"
+        self.cursor.execute(query)
+        record = self.cursor.fetchall()
+        return record
+    
+    def get_product_name_by_id(self, product_id):
+        query = f"SELECT name FROM products WHERE id = {product_id}"
         self.cursor.execute(query)
         record = self.cursor.fetchall()
         return record
@@ -56,3 +68,20 @@ class Database():
         self.cursor.execute(query)
         record = self.cursor.fetchall()
         return record
+    
+    def insert_new_user(self,customer_id,name,address,city,postCode,country):
+        query = f"INSERT OR REPLACE INTO customers (id, name, address, city, postalCode, country) \
+            VALUES ({customer_id}, '{name}', '{address}', '{city}', {postCode}, '{country}')"
+        self.cursor.execute(query)
+        self.connection.commit()
+
+    def get_user_by_id(self,id):
+        query = f"SELECT name,address, city, postalCode, country FROM customers WHERE id = {id}"
+        self.cursor.execute(query)
+        record = self.cursor.fetchall()
+        return record
+
+    def delete_user_by_id(self, user_id):
+        query = f"DELETE FROM customers WHERE id = {user_id}"
+        self.cursor.execute(query)
+        self.connection.commit()

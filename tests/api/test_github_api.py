@@ -37,7 +37,7 @@ def test_emojis(github_api):
     r = github_api.get_emojis()
 
     assert r['abc'] == 'https://github.githubassets.com/images/icons/emoji/unicode/1f524.png?v8'
-
+    assert r['apple'] == 'https://github.githubassets.com/images/icons/emoji/unicode/1f34e.png?v8'
 
 @pytest.mark.api
 def test_commits(github_api):
