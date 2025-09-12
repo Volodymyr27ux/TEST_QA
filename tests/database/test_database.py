@@ -156,9 +156,9 @@ def test_data_product_qnt():
 @pytest.mark.database
 def test_data_product_qnt1():
     db = Database()
-    db.update_product_qnt_by_id(5,-100)
+    db.update_product_qnt_by_id(5,-177)
     product_qnt = db.select_product_qnt_by_id(5)
-    assert product_qnt[0][0] == -100
+    assert product_qnt[0][0] == -177
 
 
 @pytest.mark.database
