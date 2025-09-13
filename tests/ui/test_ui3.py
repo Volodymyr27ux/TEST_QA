@@ -1,9 +1,11 @@
+
 import pytest
 
 from selenium import webdriver
 from selenium.webdriver.chrome.service import Service
 from webdriver_manager.chrome import ChromeDriverManager
 from selenium.webdriver.common.by import By
+import time
 
 
 
@@ -14,6 +16,7 @@ def test_amazon():
 
     # відкриваємо сторінку
     driver.get("https://www.amazon.com/")
+    driver.maximize_window()
     
     # пошук потрібного елемента 'поле пошуку товарів'
     field = driver.find_element(By.ID,"twotabsearchtextbox")
@@ -26,19 +29,12 @@ def test_amazon():
 
     # Емулюємо клік лівою кнопкою мишки
     btn_elem.click()
-    import time
     time.sleep(2)
     
 
     # пошуку потрібного елемента 'See options'
     btn = driver.find_element(By.ID,"a-autoid-31-announce")
     btn.click()
-    import time
-    time.sleep(5)
     
-
-
     # Закриваємо браузер
     driver.close()
-
-
