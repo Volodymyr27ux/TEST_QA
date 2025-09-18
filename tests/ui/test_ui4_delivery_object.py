@@ -1,7 +1,7 @@
 from modules.ui.page_objects.delivery_page import DeliveryPage
 import pytest
 
-@pytest.mark.ui
+@pytest.mark.ui1
 def test_delivery():
 
     # створення об'єкту сторінки

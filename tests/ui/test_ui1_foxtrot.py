@@ -54,7 +54,7 @@ def test_foxtrot():
 
     # знаходимо поле 'ваш телефон' та вводимо номер телефону
     field = driver.find_element(By.XPATH, "//*[@id='Phone']")
-    field.send_keys("0637192271")
+    field.send_keys("0631234567")
 
     # знаходимо поле 'Ім'я' та вводимо Ім'я
     field = driver.find_element(By.ID, "Name")
@@ -79,7 +79,7 @@ def test_foxtrot():
     lastname = driver.find_element(By.ID, "customer-surname").text
     assert lastname == "Черненко"
     phone = driver.find_element(By.ID, "customer-phone").text
-    assert phone == "+38(063) 7192271"
+    assert phone == "+38(063) 1234567"
 
     # Пробуемo закрити банер, якщо він є
     wait = WebDriverWait(driver, 4)
@@ -133,7 +133,7 @@ def test_foxtrot():
 
     # перевіряємо дані з форми '4.Отримувач'
     recipient_info = driver.find_element(By.XPATH, "//*[@id='checkout-form']/div[4]/div/div[6]/div[2]").text
-    assert recipient_info == "Володимир Черненко   +38 (063) 719 22 71"
+    assert recipient_info == "Володимир Черненко   +38 (063) 123 45 67"
 
     
 

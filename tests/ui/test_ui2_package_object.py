@@ -2,7 +2,7 @@ from modules.ui.page_objects.find_package import FindBox
 import pytest
 
 
-@pytest.mark.ui
+@pytest.mark.ui1
 def test_find_package():
 
     # створення об'єкту сторінки

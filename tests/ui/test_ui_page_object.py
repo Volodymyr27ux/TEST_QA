@@ -2,7 +2,7 @@ from modules.ui.page_objects.sign_in_page import SignInPage
 import pytest
 
 
-@pytest.mark.ui
+@pytest.mark.ui1
 def test_check_incorrect_username_page_object():
     # створення об'єкту сторінки
     sign_in_page = SignInPage()

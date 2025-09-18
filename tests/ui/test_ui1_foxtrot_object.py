@@ -2,7 +2,7 @@ from modules.ui.page_objects.foxtrot_page import FoxtrotPage
 import pytest
 import time
 
-@pytest.mark.ui
+@pytest.mark.ui1
 def test_foxtrot():
     #Тестування сайту foxtrot.com.ua - пошук товару, додавання до кошика, оформлення замовлення
     
@@ -23,11 +23,11 @@ def test_foxtrot():
     page.proceed_to_checkout()
 
     # заповнення контактних даних
-    page.fill_contact_details("Самар", "0637192271", "Володимир", "Черненко", "Васильович")
+    page.fill_contact_details("Самар", "0631234567", "Володимир", "Черненко", "Васильович")
 
     # Перевіряємо введені дані з форми '1.Ваші контактні дані'
     page.continue_checkout()
-    page.verify_contact_details("Володимир", "Черненко", "+38(063) 7192271")
+    page.verify_contact_details("Володимир", "Черненко", "+38(063) 1234567")
 
     # Пробуемo закрити банер, якщо він є
     page.close_banner()
@@ -50,7 +50,7 @@ def test_foxtrot():
     page.select_recipient()
     
     # перевіряємо дані з форми '4.Отримувач'
-    page.verify_recipient("Володимир Черненко   +38 (063) 719 22 71")
+    page.verify_recipient("Володимир Черненко   +38 (063) 123 45 67")
 
     # Закриваємо браузер
     page.close()
