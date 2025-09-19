@@ -4,6 +4,7 @@ from selenium.webdriver.support.ui import WebDriverWait
 from selenium.webdriver.support import expected_conditions as EC
 import time
 
+
 class FoxtrotPage(BasePage):
     URL = 'https://www.foxtrot.com.ua/'
 
@@ -77,14 +78,14 @@ class FoxtrotPage(BasePage):
         btn_elem.click()
         time.sleep(2)
     
-    def verify_contact_details(self, expected_name, expected_lastname, expected_phone):
+    def assert_contact_details(self, expected_name, expected_lastname, expected_phone):
         # Перевіряємо введені дані з форми '1.Ваші контактні дані'
         name = self.driver.find_element(By.ID, "customer-name").text
         assert name == expected_name
         lastname = self.driver.find_element(By.ID, "customer-surname").text
         assert lastname == expected_lastname
         phone = self.driver.find_element(By.ID, "customer-phone").text
-        assert phone == expected_phone
+        assert phone == expected_phone  
 
     # Пробуемo закрити банер, якщо він є
     def close_banner(self):
@@ -112,7 +113,7 @@ class FoxtrotPage(BasePage):
         time.sleep(2)
 
     # перевіряємо дані з форми '2.Доставка'
-    def verify_pickup_point(self, expected_point):
+    def assert_pickup_point(self, expected_point):
         point = self.driver.find_element(By.ID, "selected-delivery-specs-title").text
         assert point == expected_point
 
@@ -129,7 +130,7 @@ class FoxtrotPage(BasePage):
         time.sleep(2)
 
     # перевіряємо дані з форми '3.Оплата'
-    def verify_payment_method(self, expected_payment_info):
+    def assert_payment_method(self, expected_payment_info):
         payment_info = self.driver.find_element(By.ID, "payment-title").text 
         assert payment_info == expected_payment_info
 
@@ -144,6 +145,6 @@ class FoxtrotPage(BasePage):
         btn_elem.click()
 
     # перевіряємо дані з форми '4.Отримувач'
-    def verify_recipient(self, expected_recipient):
+    def assert_recipient(self, expected_recipient):
         recipient = self.driver.find_element(By.XPATH, "//*[@id='checkout-form']/div[4]/div/div[6]/div[2]").text 
         assert recipient == expected_recipient

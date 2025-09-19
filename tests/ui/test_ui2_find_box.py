@@ -4,39 +4,40 @@ from selenium import webdriver
 from selenium.webdriver.chrome.service import Service
 from webdriver_manager.chrome import ChromeDriverManager
 from selenium.webdriver.common.by import By
-
+import time
 
 
 @pytest.mark.ui
 def test_posilka():
-    # Створення об'єкту для керування бразуером
+
+    # creating object to manage the browser
     driver = webdriver.Chrome(service=Service(ChromeDriverManager().install()))
 
-    # відкриваємо сторінку https://github.com/login 
+    # open the page https://novaposhta.ua/
     driver.get("https://novaposhta.ua/")
 
-    # Знаходимо поле, в яке будемо вводити номер посилки
+    # looking for the field to enter the parcel number
     field = driver.find_element(By.XPATH, "//input[@placeholder='Введіть номер посилки']")
+    
 
-    # Вводимо номер посилки
+    # Entering the parcel number
     field.send_keys("59001449954672")
 
-    # Знаходимо кнопку 'Відстежити'
+    # Looking for the 'Track' button
     btn_elem = driver.find_element(By.XPATH, "//*[@id='__nuxt']/div/main/div/section/div/div[3]/div/div[2]/button")
 
-    # Емулюємо клік лівою кнопкою мишки
+    # Emulating a left mouse click
     btn_elem.click()
-    import time
     time.sleep(3)
     
-    # Перевіряємо, що назва сторінки така, яку ми очікуємо
+    # Checking the title of the page
     assert driver.title == "Відстежити посилку"
 
-    # Знаходимо в описі товар який відправлено('Конструктор')
+    # checking the description of the goods sent ('Constructor')
     elem = driver.find_element(By.XPATH,"//*[@id='__nuxt']/div/main/div/div[3]/div/div/div/div[1]/div[3]/div[2]/div/ul/li[5]/div[2]/p")
     value_elem = elem.text
     assert value_elem == 'Конструктор'
     
 
-    # Закриваємо браузер
+    # closing the browser
     driver.close()

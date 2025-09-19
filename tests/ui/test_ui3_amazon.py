@@ -8,33 +8,37 @@ from selenium.webdriver.common.by import By
 import time
 
 
-
-@pytest.mark.ui
+@pytest.mark.ui2
 def test_amazon():
-    # Створення об'єкту для керування бразуером
+
+    # creating object to manage the browser
     driver = webdriver.Chrome(service=Service(ChromeDriverManager().install()))
 
-    # відкриваємо сторінку
+    # open the page https://www.amazon.com/
     driver.get("https://www.amazon.com/")
     driver.maximize_window()
     
-    # пошук потрібного елемента 'поле пошуку товарів'
+    # looking for the field to enter the product name
     field = driver.find_element(By.ID,"twotabsearchtextbox")
 
-    # Вводимо потрібний товар
+    # Entering the product name
     field.send_keys("crocs mens")
 
-    # Знаходимо кнопку 'пошук'
-    btn_elem = driver.find_element(By.XPATH, "//*[@id='nav-search-submit-button']")
-
-    # Емулюємо клік лівою кнопкою мишки
+    # Looking for the 'Search' button and clicking it
+    btn_elem = driver.find_element(By.ID, "nav-search-submit-text")
     btn_elem.click()
     time.sleep(2)
     
-
-    # пошуку потрібного елемента 'See options'
+    # looking for the element 'options' and clicking it
     btn = driver.find_element(By.ID,"a-autoid-31-announce")
     btn.click()
     
-    # Закриваємо браузер
+    # looking for the element 'add to list' and clicking it
+    btn = driver.find_element(By.NAME,"submit.add-to-registry.wishlist.unrecognized")
+    btn.click()
+
+    # checking the title of the page
+    assert driver.title == ""
+    
+    # closing the browser
     driver.close()

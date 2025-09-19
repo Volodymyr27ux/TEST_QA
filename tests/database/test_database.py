@@ -70,7 +70,7 @@ def test_detailed_orders():
 
 
 @pytest.mark.database
-def test_product_insert():
+def test_insert_product():
     db = Database()
     db.insert_product(5,'кукурудза','солона',100)
     product_qnt = db.select_product_qnt_by_id(5)
@@ -168,3 +168,85 @@ def test_data_product_qnt2():
     product_qnt = db.select_product_qnt_by_id(5)
     assert product_qnt[0][0] == 'qnt'
     # sqlite3.OperationalError: no such column: qnt
+
+@pytest.mark.database
+def test_list_products():
+    db = Database()
+    products = db.get_distinct_values('products', 'name')
+    print("product names:", products)
+    assert len(products) >= 4
+
+@pytest.mark.database
+def test_get_all_orders_count():
+    db = Database()
+    orders_count = db.count_rows('orders')
+    print("General orders count is", orders_count)
+    assert orders_count >= 1
+
+@pytest.mark.database # check of adding new column 'price' to 'products' table
+def test_add_price_column_to_products():
+    db = Database()
+    columns = db.get_table_columns('products')
+    print("Current column_names in 'products' table:", columns)
+    if 'price' not in columns:
+        updated_columns = db.add_new_column('products', 'price', 'REAL')
+        print("Updated columns:", updated_columns)
+        assert 'price' in updated_columns
+    else:
+        print("Column 'price' already exists in 'products' table.")
+        assert 'price' in columns
+
+@pytest.mark.database # check of setting prices for products
+def test_set_products_price():
+    db = Database()
+    products = db.get_all_products()
+    print("Products before setting prices:", products)
+    price = 10
+
+    for id, name in products:
+        db.set_price_for_each_product(id, name, price)
+        price += 10
+
+    prices = db.get_price_column_values()
+    print("Product prices after setting:", prices)
+    assert len(prices) >= 5
+    assert prices[0][0] == 10
+    assert prices[1][0] == 20
+    assert prices[2][0] == 30
+    assert prices[3][0] == 40
+    assert prices[4][0] == 50
+    assert prices[0][0] != 15
+
+@pytest.mark.database # checking max price after setting prices
+def test_check_max_product_price():
+    db = Database()
+    max_price = db.get_max_product_price()
+    print("Max product price is", max_price)
+    assert max_price <= 50
+    assert max_price != 30
+
+@pytest.mark.database # checking search by pattern in address column of customers table
+def test_search_by_pattern_in_customers_address():
+    db = Database()
+    pattern = '%Nezalezhnosti%'
+    records = db.search_by_pattern('customers', 'address', pattern)
+    print(f"Customers with address like '{pattern}':", records)
+    assert len(records) >= 1
+    assert records[0][1] == 'Sergii'
+    assert records[0][1] != 'Volodymyr1'
+
+@pytest.mark.database # checking grouping by column in products table
+def test_group_by_product_name():
+    db = Database()
+    grouped_records = db.group_by_column('products', 'name')
+    print("Products grouped by name with counts:", grouped_records)
+    assert len(grouped_records) >= 4
+    assert grouped_records[0][0] == 'солодка вода'
+    assert grouped_records[0][1] == 2
+    assert grouped_records[0][0] != 'печиво'
+    assert grouped_records[1][0] == 'печиво'
+    assert grouped_records[1][1] == 1
+    assert grouped_records[2][0] == 'молоко'
+    assert grouped_records[2][1] == 1
+    assert grouped_records[3][0] == 'кукурудза'
+    assert grouped_records[3][1] == 1
