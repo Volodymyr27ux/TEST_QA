@@ -8,7 +8,7 @@ from selenium.webdriver.common.by import By
 import time
 
 
-@pytest.mark.ui2
+@pytest.mark.ui
 def test_amazon():
 
     # creating object to manage the browser

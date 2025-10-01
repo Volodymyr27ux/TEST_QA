@@ -17,8 +17,7 @@ def test_posilka():
     driver.get("https://novaposhta.ua/")
 
     # looking for the field to enter the parcel number
-    field = driver.find_element(By.XPATH, "//input[@placeholder='Введіть номер посилки']")
-    
+    field = driver.find_element(By.XPATH, "//input[@placeholder='Введіть номер посилки']")    
 
     # Entering the parcel number
     field.send_keys("59001449954672")
@@ -33,11 +32,10 @@ def test_posilka():
     # Checking the title of the page
     assert driver.title == "Відстежити посилку"
 
-    # checking the description of the goods sent ('Constructor')
+    # checking the description of the goods sent ('Конструктор')
     elem = driver.find_element(By.XPATH,"//*[@id='__nuxt']/div/main/div/div[3]/div/div/div/div[1]/div[3]/div[2]/div/ul/li[5]/div[2]/p")
     value_elem = elem.text
     assert value_elem == 'Конструктор'
     
-
     # closing the browser
     driver.close()

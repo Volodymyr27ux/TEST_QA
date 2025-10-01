@@ -1,4 +1,5 @@
 import pytest
+import sqlite3
 from modules.common.database import Database
 
 
@@ -19,7 +20,6 @@ def test_check_all_users():
 def test_check_user_sergii():
     db = Database()
     user = db.get_user_address_by_name('Sergii')
-
     assert user[0][0] == 'Maydan Nezalezhnosti 1'
     assert user[0][1] == 'Kyiv'
     assert user[0][2] == '3127'
@@ -31,7 +31,6 @@ def test_product_qnt_update():
     db = Database()
     db.update_product_qnt_by_id(1,25)
     water_qnt = db.select_product_qnt_by_id(1)
-
     assert water_qnt[0][0] == 25
 
 
@@ -40,7 +39,6 @@ def test_product_insert():
     db = Database()
     db.insert_product(4,'печиво','солодке',30)
     product_qnt = db.select_product_qnt_by_id(4)
-
     assert product_qnt[0][0] == 30
 
 
@@ -50,7 +48,6 @@ def test_product_delete():
     db.insert_product(99, 'тестові', 'дані', 999)
     db.delete_product_by_id(99)
     qnt = db.select_product_qnt_by_id(99)
-
     assert len(qnt) == 0
 
 
@@ -62,7 +59,7 @@ def test_detailed_orders():
     # Check quantity of orders equal to 1
     assert len(orders) == 1
 
-    # Check struture of data
+    # Check structure of data
     assert orders[0][0] == 1
     assert orders[0][1] == 'Sergii'
     assert orders[0][2] == 'солодка вода'
@@ -74,27 +71,27 @@ def test_insert_product():
     db = Database()
     db.insert_product(5,'кукурудза','солона',100)
     product_qnt = db.select_product_qnt_by_id(5)
-
     assert product_qnt[0][0] == 100
+    
 
 @pytest.mark.database
 def test_product_name():
     db = Database()
     product_name = db.get_product_name_by_id(5)
     print(product_name)
-
     assert product_name[0][0] != 'qwer'
     assert product_name[0][0] == 'кукурудза'
     assert len(product_name) == 1
+
 
 @pytest.mark.database
 def test_product_id():
     db = Database()
     product_id = db.get_product_id_by_name('кукурудза')
-
     assert product_id[0][0] != 'qw'
     assert product_id[0][0] == 5
     assert product_id[0][0] != 4
+
     
 @pytest.mark.database
 def test_new_user():
@@ -102,7 +99,6 @@ def test_new_user():
     db.insert_new_user(3,'Volodymyr','Sobornosti 25','Dnipro',7777, 'Ukraine')
     new_customer = db.get_user_by_id(3)
     print(new_customer)
-
     assert new_customer[0][0] == 'Volodymyr'
     assert new_customer[0][1] == 'Sobornosti 25'
     assert new_customer[0][2] == 'Dnipro'
@@ -118,32 +114,36 @@ def test_deleted_user():
     users = db.get_all_users()
     print(users)
     user = db.get_user_by_id(3)
-
     assert user == []
+
 
 @pytest.mark.database
 def test_data_id():
     db = Database()
-    db.insert_new_user(5.5,'Volodymyr1','Sobornosti 222','Dnipro',7777, 'Ukraine')
-# sqlite3.IntegrityError: datatype mismatch
+    with pytest.raises(sqlite3.IntegrityError) as exc_info:
+        db.insert_new_user(5.5,'Volodymyr1','Sobornosti 222','Dnipro',7777, 'Ukraine')
+    assert "datatype mismatch" in str(exc_info.value)
+
 
 @pytest.mark.database
-def test_data_name():
+def test_data_name(): #Test that inserting invalid data for name raises an error
     db = Database()
-    db.insert_new_user(5,15,'Sobornosti 222','Dnipro',7777, 'Ukraine')
-    # sqlite3.OperationalError: database is locked
+    with pytest.raises(sqlite3.OperationalError) as exc_info:
+        db.insert_new_user(5, "O'Connor's", 'Sobornosti 222', 'Dnipro', 7777, 'Ukraine')
+    assert 'syntax error' in str(exc_info.value).lower()
+
 
 @pytest.mark.database
-def test_data_postcode():
+def test_data_postcode_type_float():
     db = Database()
-    db.insert_new_user(5,'Volodymyr2','Sobornosti 222','Dnipro',777.22, 'Ukraine')
-    # sqlite3.OperationalError: database is locked
+    db.insert_new_user(5,'Volodymyr2','Sobornosti 222','Dnipro',777.777, 'Ukraine')
+
 
 @pytest.mark.database
 def test_data_postcode():
     db = Database()
     db.insert_new_user(5,'Volodymyr2','Sobornosti 222','Dnipro',-777, 'Ukraine')
-    #sqlite3.OperationalError: database is locked
+
 
 @pytest.mark.database
 def test_data_product_qnt():
@@ -162,12 +162,12 @@ def test_data_product_qnt1():
 
 
 @pytest.mark.database
-def test_data_product_qnt2():
+def test_data_product_qnt2(): #Test that updating product quantity with invalid string value raises an error
     db = Database()
-    db.update_product_qnt_by_id(5,'qnt')
-    product_qnt = db.select_product_qnt_by_id(5)
-    assert product_qnt[0][0] == 'qnt'
-    # sqlite3.OperationalError: no such column: qnt
+    with pytest.raises(sqlite3.OperationalError) as exc_info:
+        db.update_product_qnt_by_id(5, 'qnt')
+    assert "no such column: qnt" in str(exc_info.value)
+
 
 @pytest.mark.database
 def test_list_products():
@@ -176,12 +176,14 @@ def test_list_products():
     print("product names:", products)
     assert len(products) >= 4
 
+
 @pytest.mark.database
 def test_get_all_orders_count():
     db = Database()
     orders_count = db.count_rows('orders')
     print("General orders count is", orders_count)
     assert orders_count >= 1
+    
 
 @pytest.mark.database # check of adding new column 'price' to 'products' table
 def test_add_price_column_to_products():
@@ -195,6 +197,7 @@ def test_add_price_column_to_products():
     else:
         print("Column 'price' already exists in 'products' table.")
         assert 'price' in columns
+
 
 @pytest.mark.database # check of setting prices for products
 def test_set_products_price():
@@ -217,6 +220,7 @@ def test_set_products_price():
     assert prices[4][0] == 50
     assert prices[0][0] != 15
 
+
 @pytest.mark.database # checking max price after setting prices
 def test_check_max_product_price():
     db = Database()
@@ -224,6 +228,7 @@ def test_check_max_product_price():
     print("Max product price is", max_price)
     assert max_price <= 50
     assert max_price != 30
+
 
 @pytest.mark.database # checking search by pattern in address column of customers table
 def test_search_by_pattern_in_customers_address():
@@ -234,6 +239,7 @@ def test_search_by_pattern_in_customers_address():
     assert len(records) >= 1
     assert records[0][1] == 'Sergii'
     assert records[0][1] != 'Volodymyr1'
+
 
 @pytest.mark.database # checking grouping by column in products table
 def test_group_by_product_name():

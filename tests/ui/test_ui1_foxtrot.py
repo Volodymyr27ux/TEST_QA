@@ -9,38 +9,32 @@ import time
 
 
 @pytest.mark.ui
-def test_foxtrot():
-    #Тестування сайту foxtrot.com.ua - пошук товару, додавання до кошика, оформлення замовлення
+def test_foxtrot(): #Testing the site foxtrot.com.ua -searching for goods, adding to your cart, ordering an order
     
-    # Створення об'єкту для керування бразуером
     driver = webdriver.Chrome(service=Service(ChromeDriverManager().install()))
 
-    # відкриваємо сторінку
     driver.get("https://www.foxtrot.com.ua/")
     driver.maximize_window()
     
-    # знаходимо поле для пошуку товару і вводимо текст
     field = driver.find_element(By.XPATH, "//*[@id='js-fix-header']/div/div/div[4]/div[1]/input[1]")
     field.send_keys("телевізор xiaomi")
 
-    # знаходимо кнопку 'Знайти' і натискаємо її
     btn_elem = driver.find_element(By.XPATH, "//*[@id='js-fix-header']/div/div/div[4]/div[1]/input[2]")
     btn_elem.click()
 
-    # Знаходимо кнопку 'купити' та емулюємо клік лівою кнопкою мишки
     buy_elem = driver.find_element(By.XPATH, "//*[@id='search-page-container']/div[3]/div/div/div[2]/div/div/div[2]/section/article[1]/div/div/div[3]/div[2]/div[2]/button")
     buy_elem.click()
     time.sleep(2)
 
-    # знаходимо кнопку 'перейти до кошика' та емулюємо клік лівою кнопкою мишки
+    # looking for the button 'Перейти до кошика' and emulate the click with the left mouse
     btn_elem = driver.find_element(By.XPATH, "//*[@id='cart-preview']/div/div[2]/div[2]/button[1]")
     btn_elem.click()
 
-    # знаходимо кнопку 'оформити замовлення' та емулюємо клік лівою кнопкою мишки
+    # looking for the button 'оформити замовлення' and emulate the click with the left mouse
     btn_elem = driver.find_element(By.XPATH, "//*[@id='desktop-promocode-container']/div/div[2]/div[1]")
     btn_elem.click()
 
-    # знаходимо поле 'місто доставки' та вводимо текст
+    # looking for the field 'місто доставки' and enter the text
     field = driver.find_element(By.XPATH, "//*[@id='select2-select-city-first-container']")
     field.click()
     time.sleep(2)
@@ -48,32 +42,32 @@ def test_foxtrot():
     field.send_keys("Самар")
     time.sleep(3)
 
-    # вибираємо зі списку місто 'Самар, Дніпропетровська обл.' та емулюємо клік лівою кнопкою мишки 
+    # Choose from the city list 'Самар, Дніпропетровська обл.' and emulate the click with the left mouse
     city_elem = driver.find_element(By.XPATH, "//*[@id='select2-select-city-first-results']/li[2]")
     city_elem.click()
 
-    # знаходимо поле 'ваш телефон' та вводимо номер телефону
+    # looking for the field 'ваш телефон' and enter the phone number
     field = driver.find_element(By.XPATH, "//*[@id='Phone']")
     field.send_keys("0631234567")
 
-    # знаходимо поле 'Ім'я' та вводимо Ім'я
+    # looking for the field 'Ім'я' and enter the name
     field = driver.find_element(By.ID, "Name")
     field.send_keys("Володимир")
 
-    # знаходимо поле 'Прізвище' та вводимо Прізвище
+    # looking for the field 'Прізвище' and enter the last name
     field = driver.find_element(By.ID, "LastName")
     field.send_keys("Черненко")
 
-    # знаходимо поле 'По батькові' та вводимо По батькові
+    # looking for the field 'По батькові' and enter the patronymic
     field = driver.find_element(By.ID, "MiddleName")
     field.send_keys("Васильович")
 
-    # знаходимо кнопку 'Продовжити Оформлення' для форми '1.Ваші контактні дані' та емулюємо клік лівою кнопкою мишки
+    # looking for the button 'Продовжити Оформлення' of form '1.Ваші контактні дані' and emulate the click with the left mouse
     btn_elem = driver.find_element(By.XPATH,"//*[@id='contacts-block']/div[2]/div[2]/div[2]/div/button")
     btn_elem.click()
     time.sleep(2)
 
-    # перевіряємо введені дані з форми '1.Ваші контактні дані'
+    # Check data from form'1.Ваші контактні дані'
     name = driver.find_element(By.ID, "customer-name").text
     assert name == "Володимир"
     lastname = driver.find_element(By.ID, "customer-surname").text
@@ -81,7 +75,7 @@ def test_foxtrot():
     phone = driver.find_element(By.ID, "customer-phone").text
     assert phone == "+38(063) 1234567"
 
-    # Пробуемo закрити банер, якщо він є
+    # Try to close the banner if it is
     wait = WebDriverWait(driver, 4)
     try:
         cookie_btn = wait.until(
@@ -89,55 +83,51 @@ def test_foxtrot():
         )
         cookie_btn.click()
     except Exception:
-        pass  # Якщо банер не знайдено, продовжуємо без помилки
-   
-    # знаходимо елемент 'Оберіть точку самовивозу' з форми '2.Доставка' та емулюємо клік лівою кнопкою мишки
+        pass  # If the banner is not found, continue without an error
+
+    # looking for the element 'Оберіть точку самовивозу' of form '2.Доставка' and emulate the click with the left mouse
     elem = driver.find_element(By.ID, "select2-storeId-container")
     elem.click()
     time.sleep(2)
 
-    # вибираємо зі списку точку самовивозу 'МАГ ДН Самар, Гетьманська вул., 47А' та емулюємо клік лівою кнопкою мишки
+    # choose from the list the point of self -export 'МАГ ДН Самар, Гетьманська вул., 47А' and emulate the click with the left mouse
     point_elem = driver.find_element(By.ID, "select2-storeId-results")
     point_elem.click()
     
-    # знаходимо кнопку 'Продовжити Оформлення' для форми '2.Доставка' та емулюємо клік лівою кнопкою мишки
+    # looking for the button 'Продовжити Оформлення' of form '2.Доставка' and emulate the click with the left mouse
     btn_elem = driver.find_element(By.XPATH,"//*[@id='delivery-types']/div[2]/div[2]/div[2]/button")
     btn_elem.click()
     time.sleep(2)
     
-    # перевіряємо дані з форми '2.Доставка'
+    # Check data from form '2.Доставка'
     shop_delivery = driver.find_element(By.ID, "selected-delivery-specs-title").text
     assert shop_delivery == "МАГ ДН Самар, Гетьманська вул., 47А"
 
-    # Знаходимо елемент 'Оплата при отриманні' з форми '3.Оплата'та емулюємо клік лівою кнопкою мишки
+    # Find element 'Оплата при отриманні' of form '3.Оплата' and emulate the click with the left mouse
     elem = driver.find_element(By.XPATH, "//*[@id='payment-types']/div[2]/div[1]/div[1]/div/div[1]/div/div/label")
     elem.click()    
 
-    # знаходимо кнопку 'Продовжити Оформлення' для форми '3.Оплата' та емулюємо клік лівою кнопкою мишки
+    # looking for the button 'Продовжити Оформлення' of form '3.Оплата' and emulate the click with the left mouse
     btn_elem = driver.find_element(By.XPATH,"//*[@id='payment-types']/div[2]/div[2]/button")
     btn_elem.click()
     time.sleep(2)
 
-    # перевіряємо дані з форми '3.Оплата'
+    # Check data from form '3.Оплата'
     payment_info = driver.find_element(By.ID, "payment-title").text 
     assert payment_info == "Оплата при отриманні"
 
-    # Знаходимо елемент 'Я' з форми '4.Отримувач' та емулюємо клік лівою кнопкою мишки
+    # Find element 'Я' of form '4.Отримувач' and emulate the click with the left mouse
     elem = driver.find_element(By.XPATH, "//*[@id='recipient-types']/div[2]/div/div[1]/div[1]/label")
     elem.click()
     
-    # знаходимо кнопку 'Згорнути' з форми '4.Отримувач' та емулюємо клік лівою кнопкою мишки
+    # looking for the button 'Згорнути' of form '4.Отримувач' and emulate the click with the left mouse
     btn_elem = driver.find_element(By.XPATH,"//*[@id='recipient-types']/div[1]/div")
-    btn_elem.click()
-    
+    btn_elem.click()    
 
-    # перевіряємо дані з форми '4.Отримувач'
+    # Check data from form '4.Отримувач'
     recipient_info = driver.find_element(By.XPATH, "//*[@id='checkout-form']/div[4]/div/div[6]/div[2]").text
     assert recipient_info == "Володимир Черненко   +38 (063) 123 45 67"
 
-    
-
-    
-    driver.quit()
+    driver.close()
 
 
