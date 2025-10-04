@@ -8,7 +8,7 @@ import time
 
 
 @pytest.mark.ui
-def test_posilka():
+def test_find_box():
 
     # creating object to manage the browser
     driver = webdriver.Chrome(service=Service(ChromeDriverManager().install()))

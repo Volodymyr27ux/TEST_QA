@@ -29,7 +29,8 @@ def test_create_article(next_session):
 @pytest.mark.api
 def test_post_comment(next_session):
     data = {'comment':{'body':'Hello everybody'}}
-    r = next_session.post('https://conduit-api.learnwebdriverio.com/api/articles/test-y9peug/comments',json=data)
+    r = next_session.post('https://conduit-api.learnwebdriverio.com/api/articles/test-muhh58/comments',json=data)
     body = r.json()
     assert r.ok
     assert body['comment']['body'] == 'Hello everybody'
+    print(body)

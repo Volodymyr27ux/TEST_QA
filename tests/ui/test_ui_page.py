@@ -1,4 +1,5 @@
 import pytest
+
 from selenium import webdriver
 from selenium.webdriver.chrome.service import Service
 from webdriver_manager.chrome import ChromeDriverManager
@@ -17,8 +18,7 @@ def test_check_incorrect_username():
     login_elem = driver.find_element(By.ID, "login_field")
 
     # Enter incorrect username or email address
-    login_elem.send_keys("sergiibutenko@mistakeinemail.com")
-    
+    login_elem.send_keys("sergiibutenko@mistakeinemail.com")    
 
     # Find the field where we will enter incorrect password
     pass_elem = driver.find_element(By.ID, "password")

@@ -60,13 +60,12 @@ def session():
 
 
 @pytest.fixture
-def next_session():
-    http_session = requests.Session()
+def next_session(session):
     data_user = {'user':{'email': 'test@bg.com','password': '12345'}}
-    r = http_session.post('https://conduit-api.learnwebdriverio.com/api/users/login', json=data_user)
+    r = session.post('https://conduit-api.learnwebdriverio.com/api/users/login', json=data_user)
     token = r.json()['user']['token']
-    http_session.headers.update({'Authorization': f'Token {token}'})
+    session.headers.update({'Authorization': f'Token {token}'})
 
-    yield http_session
+    yield session
 
-    http_session.close()
+    session.close()
