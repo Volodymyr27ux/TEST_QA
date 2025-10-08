@@ -9,4 +9,3 @@ class BasePage:
 
     def close(self):
         self.driver.close()
-            

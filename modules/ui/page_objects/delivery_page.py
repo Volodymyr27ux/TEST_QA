@@ -1,6 +1,7 @@
 from modules.ui.page_objects.base_page import BasePage
 from selenium.webdriver.common.by import By
-import time
+from selenium.webdriver.support.ui import WebDriverWait
+from selenium.webdriver.support import expected_conditions as EC
 
 
 class DeliveryPage(BasePage):
@@ -8,6 +9,7 @@ class DeliveryPage(BasePage):
 
     def __init__(self) -> None:
         super().__init__()
+        self.wait = WebDriverWait(self.driver,4)
 
     def go_to(self):
         self.driver.get(DeliveryPage.URL)
@@ -23,21 +25,19 @@ class DeliveryPage(BasePage):
 
         # entering the address or the name of the representative
         field.send_keys(address)
-        time.sleep(2)
         
         # selecting the second option from the dropdown list
-        elem = self.driver.find_element(By.XPATH,"//*[@id='ui-id-1']/li[2]")
+        elem = self.wait.until(EC.presence_of_element_located((By.XPATH,"//*[@id='ui-id-1']/li[2]")))
         elem.click()
 
         # looking for the button 'Показати на мапі' and clicking it
-        btn_elem = self.driver.find_element(By.XPATH,"//*[@id='representatives-btn']")
+        btn_elem = self.driver.find_element(By.ID,"representatives-btn")
         btn_elem.click()
-        time.sleep(2)
 
     def check_representative_name(self, expected_name):
 
         # checking the name of the representative on the map
-        elem = self.driver.find_element(By.XPATH,"//*[@id='header-container']")
+        elem = self.wait.until(EC.presence_of_element_located((By.ID,"header-container")))
         return elem.text == expected_name
 
     def order_pickup_delivery(self):

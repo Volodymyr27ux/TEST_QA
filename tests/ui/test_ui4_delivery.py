@@ -4,7 +4,8 @@ from selenium import webdriver
 from selenium.webdriver.chrome.service import Service
 from webdriver_manager.chrome import ChromeDriverManager
 from selenium.webdriver.common.by import By
-import time
+from selenium.webdriver.support.ui import WebDriverWait
+from selenium.webdriver.support import expected_conditions as EC
 
 
 @pytest.mark.ui
@@ -25,19 +26,17 @@ def test_delivery():
 
     # entering the address of the representative office in the search field
     field.send_keys("вул. Спаська, 16")
-    time.sleep(2)
     
     # choosing the second option from the dropdown list
-    elem = driver.find_element(By.XPATH,"//*[@id='ui-id-1']/li[2]")
+    elem = WebDriverWait(driver,1).until(EC.presence_of_element_located((By.XPATH,"//*[@id='ui-id-1']/li[2]")))
     elem.click()
 
     # looking for the button 'Знайти' and clicking it
-    btn_elem = driver.find_element(By.XPATH,"//*[@id='representatives-btn']")
+    btn_elem = driver.find_element(By.ID,"representatives-btn")
     btn_elem.click()
-    time.sleep(2)
 
     # checking the name of the found representative office
-    elem = driver.find_element(By.XPATH,"//*[@id='header-container']")
+    elem = WebDriverWait(driver,1).until(EC.presence_of_element_located((By.ID,"header-container")))
     assert elem.text == 'САМАР-1 (НОВОМОСКОВСЬК-1)'
 
     # looking for the link "Замовити забір/доставку вантажу - "НАТИСНИ ТУТ" або зателефонуй" and clicking it

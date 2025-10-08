@@ -1,10 +1,13 @@
 from modules.ui.page_objects.delivery_page import DeliveryPage
 import pytest
+from selenium import webdriver
+from selenium.webdriver.chrome.service import Service
+from webdriver_manager.chrome import ChromeDriverManager
 
 @pytest.mark.ui1
 def test_delivery():
 
-    # creating object to manage the browser
+    # creating page object (will create its own driver)
     page = DeliveryPage()
 
     # open the page https://www.delivery-auto.com/uk-ua/Home/Index
